@@ -1,10 +1,10 @@
 /**
-	Purpose: load options from rest and update field every day
-	Usage: all projects, field configuration
-	Preconditions: None
-	Enviroment: JIRA Software 8.15.0, ScriptRunner v. 6.30.2
-	Script type: Filesystem
-	Author: Gleb Yudenok
+    Purpose: load options from rest and update field every day
+    Usage: all projects, field configuration
+    Preconditions: None
+    Enviroment: JIRA Software 8.15.0, ScriptRunner v. 6.30.2
+    Script type: Filesystem
+    Author: Gleb Yudenok
 */
 
 package ciklum.configurations.common.jobs
@@ -53,14 +53,13 @@ deleteOptions()
 List options = new ArrayList()
 
 output.each {
-	def newSeqId
+    def newSeqId
     if (currentOptions) {
         newSeqId = currentOptions*.sequence.max() - 1
     } else { 
         newSeqId = 0L
     }   
-    log.warn(it.getClass())
-	options.add(optionsManager.createOption(fieldConfig, null, newSeqId, it.getAt('name')))
+    options.add(optionsManager.createOption(fieldConfig, null, newSeqId, it.getAt('name')))
 }
 
 ApplicationUser currentUser = ComponentAccessor.jiraAuthenticationContext.loggedInUser
@@ -68,21 +67,21 @@ def issueInputParameters = issueService.newIssueInputParameters()
 
 options.each { option ->
     issueInputParameters.with {
-		addCustomFieldValue(option.value, null)
-	}
+	addCustomFieldValue(option.value, null)
+    }
 }
 
 def updateValidationResult = issueService.validateUpdate(currentUser, issue.id, issueInputParameters)
 if (updateValidationResult.isValid()) {
-	issueService.update(currentUser, updateValidationResult)
+    issueService.update(currentUser, updateValidationResult)
 }
 else {
-	log.warn("Failed to update issue: ${issue.key}: ${updateValidationResult.errorCollection}")
+    log.warn("Failed to update issue: ${issue.key}: ${updateValidationResult.errorCollection}")
 }
 
 public void deleteOptions() {
-	Options options = optionsManager.getOptions(namesField.getRelevantConfig(issue))
-	options.each {
+    Options options = optionsManager.getOptions(namesField.getRelevantConfig(issue))
+    options.each {
         optionsManager.deleteOptionAndChildren(it)
     }
 }
