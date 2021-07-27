@@ -10,7 +10,7 @@ import groovy.transform.BaseScript
 @BaseScript FieldBehaviours fieldBehaviours
 
 /*
-	better use field id's, but for working on any jira instance
+    better use field id's, but for working on any jira instance
 */
 
 String FRED_FIELD_NAME = 'Fred'
@@ -32,27 +32,27 @@ FormField williamField = getFieldByName(WILLIAM_FIELD_NAME)
 FormField johnField = getFieldByName(JOHN_FIELD_NAME)
 
 Map<String, FormField> fields = [
-    							(FRED_FIELD_NAME) : (fredField),
-                          		(DAN_FIELD_NAME) : (danField),
-                          		(DOMINIC_FIELD_NAME) : (dominicField),
-                          		(ALEX_FIELD_NAME) : (alexField),
-                          		(BOB_FIELD_NAME) : (bobField),
-                          		(KEVIN_FIELD_NAME) : (kevinField),
-                          		(WILLIAM_FIELD_NAME) : (williamField),
-                          		(JOHN_FIELD_NAME) : (johnField)]
+    				 (FRED_FIELD_NAME) : (fredField),
+                                 (DAN_FIELD_NAME) : (danField),
+                          	 (DOMINIC_FIELD_NAME) : (dominicField),
+                          	 (ALEX_FIELD_NAME) : (alexField),
+                          	 (BOB_FIELD_NAME) : (bobField),
+                          	 (KEVIN_FIELD_NAME) : (kevinField),
+                          	 (WILLIAM_FIELD_NAME) : (williamField),
+                          	 (JOHN_FIELD_NAME) : (johnField)]
 
 LazyMap getDataFromRest(String parameter) {
     final String URL = "https://api.agify.io/?name=${parameter}"
-	JsonSlurper jsonFormatter = new JsonSlurper()
-	URLConnection connection = URL.toURL().openConnection()
-	jsonFormatter.parseText(connection.content.text) as LazyMap
+    JsonSlurper jsonFormatter = new JsonSlurper()
+    URLConnection connection = URL.toURL().openConnection()
+    jsonFormatter.parseText(connection.content.text) as LazyMap
 }
 
 Character lastCharacter = null
 List arr = []
 
 fields.each { Object<String, FormField> field ->
-	LazyMap fieldInfo = getDataFromRest(field.key)
+    LazyMap fieldInfo = getDataFromRest(field.key)
     
     Integer age = fieldInfo.getAt('age') as Integer
     arr.add(age)
